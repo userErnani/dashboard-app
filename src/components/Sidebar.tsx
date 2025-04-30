@@ -33,7 +33,7 @@ export default function Sidebar({ children }: SidebarProps) {
       <aside
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`h-screen bg-primary text-white flex flex-col transition-all duration-300 ${
+        className={`h-screen bg-primary text-white flex flex-col transition-all duration-300 z-100 ${
           isHovered ? 'w-64' : 'w-14'
         }`}
       >

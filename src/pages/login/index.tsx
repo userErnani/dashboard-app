@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
 import { LoginSchema, loginSchemaResolver } from '../../schemas/loginSchema';
 import { useForm } from 'react-hook-form';
 
@@ -18,21 +18,21 @@ export default function LoginPage() {
 
   const onSubmit = (data: LoginSchema) => {
     console.log(data);
-    router.push('/dashboard');
+    router.push('/');
   };
 
   return (
     <div className="flex w-full h-screen">
       <div className="w-1/2 h-screen flex items-center justify-center p-20">
         <div>
-          <h2 className="text-md font-bold">Welcome to</h2>
+          <h2 className="text-md font-bold text-gray-800">Bem-vindo de volta!</h2>
           <Image src="/images/logo.png" alt="Logo" width={300} height={300} />
           <p className="text-xs mb-4 text-gray">
             Que bom ter você de volta! É um novo dia para gerenciar seus projetos. Faça login e
             comece agora mesmo.
           </p>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
             <Input
               id="email"
               label="Email"
