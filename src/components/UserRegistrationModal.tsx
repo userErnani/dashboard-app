@@ -5,6 +5,8 @@ import { StepTabs } from './ui/StepTabs';
 import { NewUserForm } from './forms/NewUserForm';
 import { PasswordAndEmailForm } from './forms/PasswordAndEmailForm';
 import { PermissionMatrix } from './PermissionMatrix';
+import { useForm } from 'react-hook-form';
+import { CreateUserSchema, createUserSchemaResolver } from '../schemas/createUserSchema';
 
 interface UserRegistrationModalProps {
   isOpen: boolean;
@@ -19,13 +21,22 @@ export const UserRegistrationModal: React.FC<UserRegistrationModalProps> = ({
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateUserSchema>({
+    resolver: createUserSchemaResolver,
+  });
+
   const handleCancelForm = () => {
     onClose();
     setCurrentStep(0);
   };
 
-  const handleSaveForm = (data: any) => {
-    console.log('Dados do formulário:', data);
+  const onSubmit = (data: CreateUserSchema) => {
+    console.log('Todos os dados finais:', data);
+    console.log('Permissões:', permissions);
     onClose();
     setCurrentStep(0);
   };
@@ -63,9 +74,9 @@ export const UserRegistrationModal: React.FC<UserRegistrationModalProps> = ({
   const renderStepForm = () => {
     switch (currentStep) {
       case 0:
-        return <NewUserForm onCancel={handleCancelForm} onSave={handleSaveForm} />;
+        return <NewUserForm register={register} error={errors} />;
       case 1:
-        return <PasswordAndEmailForm />;
+        return <PasswordAndEmailForm register={register} error={errors} />;
       case 2:
         return <PermissionMatrix value={permissions} onChange={handlePermissionChange} />;
       default:
@@ -111,7 +122,11 @@ export const UserRegistrationModal: React.FC<UserRegistrationModalProps> = ({
             <Button
               type="button"
               className="bg-primary text-white px-4 py-2 rounded"
-              onClick={handleNextStep}
+              onClick={
+                currentStep === STEP_TITLES.length - 1
+                  ? handleSubmit(onSubmit, () => setCurrentStep(0))
+                  : handleNextStep
+              }
             >
               {currentStep === STEP_TITLES.length - 1 ? 'Salvar' : 'Próximo'}
             </Button>

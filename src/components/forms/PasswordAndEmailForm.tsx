@@ -1,24 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 import Input from '../ui/Input';
-import { useForm } from 'react-hook-form';
+import { CreateUserSchema } from '../../schemas/createUserSchema';
 
-interface PasswordAndEmailFormProps {}
+interface PasswordAndEmailFormProps {
+  register: UseFormRegister<any>;
+  error?: FieldErrors<CreateUserSchema>;
+}
 
-export const PasswordAndEmailForm: React.FC<
-  PasswordAndEmailFormProps
-> = ({}: PasswordAndEmailFormProps) => {
-  const { register, handleSubmit } = useForm();
-
+export const PasswordAndEmailForm: React.FC<PasswordAndEmailFormProps> = ({
+  register,
+}: PasswordAndEmailFormProps) => {
   return (
-    <form className="space-y-6">
-      <div>
+    <>
+      <div className="">
         <Input
           label="Email"
           id="email"
           type="email"
           placeholder="Email"
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded w-full mb-4"
           registration={register('email', {
             required: 'Email é obrigatório',
           })}
@@ -47,6 +50,6 @@ export const PasswordAndEmailForm: React.FC<
           })}
         />
       </div>
-    </form>
+    </>
   );
 };
