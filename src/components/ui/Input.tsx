@@ -23,8 +23,9 @@ export default function Input({
       </label>
       <input
         id={id}
-        {...registration}
+        aria-invalid={!!error}
         {...props}
+        {...registration}
         className={`border border-gray-400 rounded-md w-full py-2 px-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition ${className ?? ''}`}
       />
       {error && <p className="text-red-500 text-xs mt-1">{error.message}</p>}
