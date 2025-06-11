@@ -10,17 +10,15 @@ import { UserSearchForm } from '../components/forms/UserSearchForm';
 import { PageHeader } from '../components/PageHeader';
 import { UserRegistrationModal } from '../components/UserRegistrationModal';
 
-const customers = [
-  {
-    code: '001',
-    name: 'Jane Cooper',
-    nickname: 'Janey',
-    email: 'jane@microsoft.com',
-    status: 'Active',
-  },
-];
+interface Customer {
+  code: string;
+  name: string;
+  nickname: string;
+  email: string;
+  status: 'Active' | 'Inactive'; // ou apenas string, se for mais genérico
+}
 
-const columns: Column<(typeof customers)[number] & { actions?: unknown }>[] = [
+const columns: Column<Customer & { actions?: unknown }>[] = [
   { label: 'Código', accessor: 'code' },
   { label: 'Nome', accessor: 'name' },
   { label: 'Apelido', accessor: 'nickname' },
@@ -45,15 +43,33 @@ const columns: Column<(typeof customers)[number] & { actions?: unknown }>[] = [
 export default function Home() {
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+const [users, setUsers] = useState<Customer[]>([]);
+
+  const fetchUsers = async () => {
+  try {
+    const res = await fetch('http://localhost:3001/user'); // ajuste porta e URL conforme seu backend
+    const data = await res.json();
+    setUsers(data);
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+  }
+};
+
+useEffect(() => {
+  fetchUsers();
+}, []);
+
+
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm<SearchUserSchema>({
     resolver: searchUserSchemaResolver,
   });
 
-  const handleSubmit = (data: SearchUserSchema) => {
+  const onSubmit = (data: SearchUserSchema) => {
     console.log(data);
   };
 
@@ -66,8 +82,7 @@ export default function Home() {
           <PageHeader title="Usuários" subtitle="Todos os usuários cadastrados" />
 
           <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-end">
-            <UserSearchForm onSubmit={handleSubmit} register={register} errors={errors} />
-
+            <UserSearchForm onSubmit={handleSubmit(onSubmit)} register={register} errors={errors} />
             <Button
               type="button"
               className="h-11 bg-primary text-white font-bold hover:bg-primary-hover transition-colors px-6 rounded-md"
@@ -81,10 +96,10 @@ export default function Home() {
         <div className="bg-white shadow-2xl rounded-2xl p-6 mt-10">
           <Table
             columns={columns}
-            data={customers}
+            data={users}
             page={page}
             pageSize={5}
-            total={customers.length}
+            total={users.length}
             onPageChange={(newPage) => setPage(newPage)}
             hasViewer
             hasEdit

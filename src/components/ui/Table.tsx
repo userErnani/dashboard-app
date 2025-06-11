@@ -115,7 +115,7 @@ function Table<T extends object>({
 
       <div className="flex flex-col md:flex-row justify-between items-center mt-6 text-sm text-gray-400 gap-4">
         <span>
-          Exibindo {startIndex + 1} - {Math.min(startIndex + data.length, total)} de {total}{' '}
+          Página {startIndex + 1} - {Math.min(startIndex + data.length, total)} de {total}{' '}
           registros
         </span>
 

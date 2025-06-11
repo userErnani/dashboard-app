@@ -1,22 +1,18 @@
-import { FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
-import { SearchUserSchema, searchUserSchemaResolver } from '../../schemas/searchUserSchema';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { SearchUserSchema } from '../../schemas/searchUserSchema';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 
 interface UserSearchFormProps {
-  onSubmit: (data: SearchUserSchema) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   register: UseFormRegister<SearchUserSchema>;
   errors: FieldErrors<SearchUserSchema>;
 }
 
 export function UserSearchForm({ onSubmit, register, errors }: UserSearchFormProps) {
-  const { handleSubmit } = useForm<SearchUserSchema>({
-    resolver: searchUserSchemaResolver,
-  });
-
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
       className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-end"
     >
       <Input
